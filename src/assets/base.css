@@ -12,8 +12,8 @@
 
 body {
   min-height: 100vh;
-  color: var(--color-text-2);
-  background: var(--color-bg-2);
+  color: var(--color-text-1);
+  background: var(--color-bg-3);
   transition:
     color 0.5s,
     background-color 0.5s;
@@ -35,4 +35,27 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* 定义滚动条整体样式 */
+::-webkit-scrollbar {
+  width: 5px; /* 设置滚动条宽度为5px */
+  height: 5px; /* 设置滚动条高度为5px，仅在水平滚动时生效 */
+}
+
+/* 定义滚动条轨道样式 */
+::-webkit-scrollbar-track {
+  background: transparent; /* 设置滚动条轨道背景为透明 */
+}
+
+/* 定义滚动条滑块样式 */
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2); /* 设置滚动条滑块背景为黑色，并且透明度为0.2 */
+  border-radius: 5px; /* 设置滚动条滑块圆角为5px */
+}
+
+/* 针对非WebKit浏览器的滚动条样式，如Firefox */
+body {
+  scrollbar-width: thin; /* 设置滚动条宽度为thin */
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent; /* 设置滚动条滑块颜色为黑色透明度0.2，轨道颜色为透明 */
 }

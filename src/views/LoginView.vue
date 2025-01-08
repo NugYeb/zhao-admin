@@ -1,3 +1,34 @@
+<script setup lang="ts">
+import { login_in } from '@/api/login'
+import { Message } from '@arco-design/web-vue'
+import { reactive } from 'vue'
+import { useRouter } from 'vue-router'
+
+const loginData = reactive({
+  username: 'admin',
+  password: '123456',
+})
+
+const router = useRouter()
+
+const submit = () => {
+  login_in(loginData).then((res) => {
+    Message.success('登录成功')
+    localStorage.setItem('token', res.data.token)
+    goAdmin()
+  })
+}
+
+const reset = () => {
+  loginData.username = ''
+  loginData.password = ''
+}
+
+const goAdmin = () => {
+  router.push('/')
+}
+</script>
+
 <template>
   <div class="login-box">
     <a-card class="login-card" bordered>
@@ -28,43 +59,12 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { login } from '@/api/login'
-import { reactive } from 'vue'
-import { useRouter } from 'vue-router'
-
-const loginData = reactive({
-  username: '',
-  password: '',
-})
-
-const router = useRouter()
-
-const submit = () => {
-  console.log('用户名:', loginData.username)
-  console.log('密码:', loginData.password)
-
-  login(loginData.username, loginData.password).then((res) => {
-    console.log('登录成功:', res)
-  })
-}
-
-const reset = () => {
-  loginData.username = ''
-  loginData.password = ''
-}
-
-const goAdmin = () => {
-  router.push('/')
-}
-</script>
-
 <style scoped>
 .login-box {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: var(--color-bg-3);
+  background: var(--color-bg-2);
 }
 
 .login-card {

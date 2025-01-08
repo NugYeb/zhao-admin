@@ -1,16 +1,7 @@
+import type { BaseResponse } from '@/type/api/common'
 import instance from './axios'
+import type { LoginReq, LoginRes } from '@/type/api/login'
 
-interface LoginResponse {
-  username: string
-  id: number
-  role: string
-  token: string
-}
-
-export const login = async (
-  username: string,
-  password: string,
-): Promise<LoginResponse> => {
-  const res = await instance.post('/api/login', { username, password })
-  return res.data
+export const login_in = (login_req: LoginReq): Promise<BaseResponse<LoginRes>> => {
+  return instance.post('/api/login', login_req)
 }

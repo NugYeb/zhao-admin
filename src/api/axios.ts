@@ -2,14 +2,15 @@ import axios from 'axios'
 import { Message } from '@arco-design/web-vue'
 
 const instance = axios.create({
-  baseURL: '', // 替换为你的 API 基础 URL
-  timeout: 20000, // 请求超时时间
+  baseURL: 'http://127.0.0.1:7456',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  timeout: 20000,
 })
 
-// 请求拦截器
 instance.interceptors.request.use(
   (config) => {
-    // 在发送请求之前做些什么，例如添加 token
     const token = localStorage.getItem('token')
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
@@ -17,30 +18,89 @@ instance.interceptors.request.use(
     return config
   },
   (error) => {
-    // 对请求错误做些什么
     Message.error(`请求错误: ${error.message}`)
     return Promise.reject(error)
   },
 )
 
-// 响应拦截器
 instance.interceptors.response.use(
   (response) => {
-    // 对响应数据做些什么
     if (response.status === 200) {
-      console.log(response.data)
       return response.data
     }
-    // 如果状态码不是200，则弹出错误信息
-    Message.error(`请求失败，状态码：${response.status}`)
-    return Promise.reject(new Error(`请求失败，状态码：${response.status}`))
+    return Promise.reject(response)
   },
   (error) => {
-    // 对响应错误做些什么
-    if (error.response && error.response.status === 401) {
-      // 例如，处理未授权错误，重定向到登录页面
-      console.error('未授权，请重新登录')
-      Message.error('未授权，请重新登录')
+    if (error.response) {
+      switch (error.response.status) {
+        case 400:
+          Message.error('请求错误，请检查参数')
+          console.error(
+            `请求错误，状态码：${error.response.status}`,
+            error.response.data,
+          )
+          break
+        case 401:
+          Message.error('未授权，请重新登录')
+          console.error(
+            `未授权，请重新登录，状态码：${error.response.status}`,
+            error.response.data,
+          )
+          break
+        case 402:
+          Message.error('请求错误，请检查参数')
+          console.error(
+            `请求错误，请检查参数，状态码：${error.response.status}`,
+            error.response.data,
+          )
+          break
+        case 403:
+          Message.error('拒绝访问')
+          console.error(
+            `拒绝访问，状态码：${error.response.status}`,
+            error.response.data,
+          )
+          break
+        case 404:
+          Message.error('请求错误，未找到该资源')
+          console.error(
+            `请求错误，未找到该资源，状态码：${error.response.status}`,
+            error.response.data,
+          )
+          break
+        case 500:
+          Message.error('服务器错误，请联系管理员')
+          console.error(
+            `服务器错误，请联系管理员，状态码：${error.response.status}`,
+            error.response.data,
+          )
+          break
+        case 503:
+          Message.error('服务不可用，请稍后再试')
+          console.error(
+            `服务不可用，请稍后再试，状态码：${error.response.status}`,
+            error.response.data,
+          )
+          break
+        case 504:
+          Message.error('网关超时，请稍后再试')
+          console.error(
+            `网关超时，请稍后再试，状态码：${error.response.status}`,
+            error.response.data,
+          )
+          break
+        case 505:
+          Message.error('HTTP版本不受支持')
+          console.error(
+            `HTTP版本不受支持，状态码：${error.response.status}`,
+            error.response.data,
+          )
+        default:
+          Message.error(`请求失败，状态码：${error.response.status}`)
+      }
+    } else {
+      Message.error('未知错误')
+      console.error(`未知错误: ${error.response.status}`, error.message)
     }
     return Promise.reject(error)
   },
