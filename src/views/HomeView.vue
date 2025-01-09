@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AsideMenu from '@/components/home/AsideMenu.vue'
+import HeaderComp from '@/components/home/HeaderComp.vue';
 import { ref } from 'vue'
 const isCollapsed = ref(true)
 </script>
@@ -14,7 +15,9 @@ const isCollapsed = ref(true)
       <AsideMenu v-model:collapsed="isCollapsed" />
     </aside>
     <div class="container">
-      <header>页眉</header>
+      <header>
+        <HeaderComp />
+      </header>
       <main>
         主体
 
@@ -38,8 +41,8 @@ const isCollapsed = ref(true)
 aside {
   width: 14.5rem;
   height: calc(100vh - 2rem);
-  background: var(--color-bg-2);
 }
+
 .collapsed-width {
   width: 5rem;
 }
@@ -49,14 +52,12 @@ aside {
 }
 
 header {
-  height: 5rem;
-  background: var(--color-bg-2);
+  height: 4rem;
   border-radius: 0.6rem;
 }
 
 main {
   flex: 1;
-  background: var(--color-bg-2);
   border-radius: 0.6rem;
 }
 

@@ -1,0 +1,7 @@
+:root {
+  --zcolor-text-3: #885b5b;
+}
+
+body[arco-theme='dark'] {
+  --zcolor-text-3: #ff3131;
+}

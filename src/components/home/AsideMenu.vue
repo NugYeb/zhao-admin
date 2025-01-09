@@ -61,17 +61,37 @@ const toggleCollapsed = () => {
       showCollapseButton
       :collapsed="collapsed"
       @collapse="toggleCollapsed"
+      theme="light"
     >
       <template v-for="item in menuData" :key="item.key">
-        <component :is="item.children ? SubMenu : MenuItem">
-          <template #icon><component :is="item.icon"></component></template>
-          <template v-if="item.children" #title>{{ item.name }}</template>
+        <component
+          :is="item.children ? SubMenu : MenuItem"
+          style="color: var(--color-text-1)"
+        >
+          <template #icon
+            ><component
+              :is="item.icon"
+              style="color: var(--color-text-1)"
+            ></component
+          ></template>
+          <template v-if="item.children" #title
+            ><span style="color: var(--color-text-1)">{{
+              item.name
+            }}</span></template
+          >
           <template v-if="!item.children">{{ item.name }}</template>
 
           <template v-if="item.children">
-            <a-menu-item v-for="child in item.children" :key="child.key">
+            <a-menu-item
+              v-for="child in item.children"
+              :key="child.key"
+              style="color: var(--color-text-1)"
+            >
               <template #icon>
-                <component :is="child.icon"></component>
+                <component
+                  :is="child.icon"
+                  style="color: var(--color-text-1)"
+                ></component>
               </template>
               {{ child.name }}
             </a-menu-item>
@@ -85,10 +105,9 @@ const toggleCollapsed = () => {
 <style scoped>
 .menu-demo {
   width: 100%;
-  height: calc(100vh - 2rem);
+  height: 100%;
   padding: 0.5rem 1rem;
   box-sizing: border-box;
-  background-color: var(--color-bg-3);
 }
 
 .menu-demo .arco-menu {
