@@ -1,10 +1,17 @@
 <script setup lang="ts">
-import type { Menu } from '@/type/component/menu'
+import type { MenuType } from '@/type/component/menu'
 import { markRaw, ref } from 'vue'
+import { useRoute } from 'vue-router'
 
-import { MenuItem, SubMenu } from '@arco-design/web-vue'
-
-import { IconApps, IconBug, IconBulb } from '@arco-design/web-vue/es/icon'
+import {
+  IconHome,
+  IconUser,
+  IconBook,
+  IconList,
+  IconEdit,
+  IconSettings,
+} from '@arco-design/web-vue/es/icon'
+import router from '@/router'
 
 const props = defineProps({
   collapsed: {
@@ -12,91 +19,83 @@ const props = defineProps({
     required: true,
   },
 })
-
 const emit = defineEmits(['update:collapsed'])
-
-const menuData = ref<Menu[]>([
-  {
-    key: '1',
-    name: '总览',
-    path: '/',
-    icon: markRaw(IconApps),
-  },
-  {
-    key: '2',
-    name: '用户管理',
-    path: '/user',
-    icon: markRaw(IconBug),
-  },
-  {
-    key: '3',
-    name: '文章管理',
-    path: '/article',
-    icon: markRaw(IconBulb),
-    children: [
-      {
-        key: '3_0',
-        name: '文章列表',
-        path: '/article/list',
-        icon: markRaw(IconBug),
-      },
-      {
-        key: '3_1',
-        name: '文章编辑',
-        path: '/article/edit',
-        icon: markRaw(IconBug),
-      },
-    ],
-  },
-])
-
 const toggleCollapsed = () => {
   emit('update:collapsed', !props.collapsed)
 }
+
+const menuData = ref<MenuType[]>([
+  {
+    title: '总览',
+    name: 'dashboard',
+    path: '/',
+    icon: markRaw(IconHome),
+  },
+  {
+    title: '用户管理',
+    name: 'user',
+    path: '/user',
+    icon: markRaw(IconUser),
+  },
+  {
+    title: '文章管理',
+    name: 'article',
+    path: '/article',
+    icon: markRaw(IconBook),
+    children: [
+      {
+        title: '文章列表',
+        name: 'article',
+        path: '/article',
+        icon: markRaw(IconList),
+      },
+      {
+        title: '文章编辑',
+        name: 'edit',
+        path: '/edit',
+        icon: markRaw(IconEdit),
+      },
+    ],
+  },
+  {
+    title: '系统设置',
+    name: 'system',
+    path: '/system',
+    icon: markRaw(IconSettings),
+  },
+])
+
+const menuItemClick = (name: string) => {
+  router.push(name)
+}
+
+const route = useRoute()
 </script>
 
 <template>
   <div class="menu-demo">
     <a-menu
-      showCollapseButton
+      show-collapse-button
       :collapsed="collapsed"
+      :selected-keys="[route.name]"
       @collapse="toggleCollapsed"
-      theme="light"
+      @menu-item-click="menuItemClick"
     >
-      <template v-for="item in menuData" :key="item.key">
-        <component
-          :is="item.children ? SubMenu : MenuItem"
-          style="color: var(--color-text-1)"
-        >
-          <template #icon
-            ><component
-              :is="item.icon"
-              style="color: var(--color-text-1)"
-            ></component
-          ></template>
-          <template v-if="item.children" #title
-            ><span style="color: var(--color-text-1)">{{
-              item.name
-            }}</span></template
-          >
-          <template v-if="!item.children">{{ item.name }}</template>
-
-          <template v-if="item.children">
-            <a-menu-item
-              v-for="child in item.children"
-              :key="child.key"
-              style="color: var(--color-text-1)"
-            >
-              <template #icon>
-                <component
-                  :is="child.icon"
-                  style="color: var(--color-text-1)"
-                ></component>
-              </template>
-              {{ child.name }}
-            </a-menu-item>
+      <template v-for="item in menuData">
+        <a-menu-item :key="item.name" v-if="!item.children">
+          <component :is="item.icon"></component>
+          <span>{{ item.title }}</span>
+        </a-menu-item>
+        <a-sub-menu v-if="item.children" :key="item.name">
+          <template #icon><component :is="item.icon"></component></template>
+          <template #title>
+            <span>{{ item.title }}</span>
           </template>
-        </component>
+          <a-menu-item :key="sub.name" v-for="sub in item.children">
+            <component :is="sub.icon"></component>
+            <span>{{ sub.title }}</span>
+          </a-menu-item>
+        </a-sub-menu>
       </template>
     </a-menu>
   </div>

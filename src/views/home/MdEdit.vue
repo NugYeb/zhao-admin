@@ -33,7 +33,7 @@ const theme = computed<Themes>(() => {
 <style scoped>
 .md-editor {
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   border-radius: 0.6rem;
 }
 .md-editor-dark {

@@ -30,6 +30,11 @@ const router = createRouter({
           name: 'edit',
           component: () => import('../views/home/MdEdit.vue'),
         },
+        {
+          path: 'system',
+          name: 'system',
+          component: () => import('../views/home/SystemAdmin.vue'),
+        }
       ],
     },
     {

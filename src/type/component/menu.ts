@@ -1,9 +1,9 @@
 import type { Component } from "vue"
 
-export interface Menu {
-  key: string
+export interface MenuType {
+  title: string
   name: string
   path: string
   icon: Component
-  children?: Menu[]
+  children?: MenuType[]
 }
