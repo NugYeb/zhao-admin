@@ -23,12 +23,19 @@ const router = createRouter({
         {
           path: 'article',
           name: 'article',
-          component: () => import('../views/home/ArticleAdmin.vue'),
-        },
-        {
-          path: 'edit',
-          name: 'edit',
-          component: () => import('../views/home/MdEdit.vue'),
+          redirect: '/article/list',
+          children: [
+            {
+              path: 'list',
+              name: 'list',
+              component: () => import('../views/home/ArticleAdmin.vue'),
+            },
+            {
+              path: 'edit',
+              name: 'edit',
+              component: () => import('../views/home/MdEdit.vue'),
+            },
+          ],
         },
         {
           path: 'system',

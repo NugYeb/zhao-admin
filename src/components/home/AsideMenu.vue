@@ -28,31 +28,26 @@ const menuData = ref<MenuType[]>([
   {
     title: '总览',
     name: 'dashboard',
-    path: '/',
     icon: markRaw(IconHome),
   },
   {
     title: '用户管理',
     name: 'user',
-    path: '/user',
     icon: markRaw(IconUser),
   },
   {
     title: '文章管理',
     name: 'article',
-    path: '/article',
     icon: markRaw(IconBook),
     children: [
       {
         title: '文章列表',
-        name: 'article',
-        path: '/article',
+        name: 'list',
         icon: markRaw(IconList),
       },
       {
         title: '文章编辑',
         name: 'edit',
-        path: '/edit',
         icon: markRaw(IconEdit),
       },
     ],
@@ -60,16 +55,23 @@ const menuData = ref<MenuType[]>([
   {
     title: '系统设置',
     name: 'system',
-    path: '/system',
     icon: markRaw(IconSettings),
   },
 ])
 
 const menuItemClick = (name: string) => {
-  router.push(name)
+  router.push({ name: name })
 }
 
 const route = useRoute()
+
+const openKeys = ref<string[]>([])
+const initComp = () => {
+  if (route.matched.length === 3) {
+    openKeys.value = [route.matched[1].name as string]
+  }
+}
+initComp()
 </script>
 
 <template>
@@ -78,6 +80,7 @@ const route = useRoute()
       show-collapse-button
       :collapsed="collapsed"
       :selected-keys="[route.name]"
+      v-model:open-keys="openKeys"
       @collapse="toggleCollapsed"
       @menu-item-click="menuItemClick"
     >
