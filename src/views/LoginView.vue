@@ -64,7 +64,6 @@ const goAdmin = () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: var(--color-bg-2);
 }
 
 .login-card {

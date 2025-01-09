@@ -1,10 +1,15 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
+import type { Themes } from 'md-editor-v3'
 
 export const useThemeStore = defineStore('theme', () => {
   const currentTheme = ref<string>('dark')
 
   const theme = computed(() => currentTheme.value)
+
+  const editTheme= computed<Themes>(() => {
+    return theme.value === 'dark' ? 'dark' : 'light'
+  })
 
   function setTheme(newTheme: string) {
     if (newTheme === 'dark') {
@@ -24,6 +29,7 @@ export const useThemeStore = defineStore('theme', () => {
 
   return {
     theme,
+    editTheme,
     initTheme,
     setTheme,
   }

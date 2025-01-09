@@ -21,16 +21,6 @@ export default defineConfig({
     // }),
     vueDevTools(),
   ],
-  // css: {
-  //   preprocessorOptions: {
-  //     less: {
-  //       modifyVars: {
-  //         'color-bg-3': '#12345',
-  //       },
-  //       javascriptEnabled: true,
-  //     },
-  //   },
-  // },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),

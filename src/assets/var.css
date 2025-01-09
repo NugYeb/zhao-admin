@@ -1,7 +1,9 @@
-:root {
-  --zcolor-text-3: #885b5b;
+body {
+  --z-color-bg: #f0f0f0;
+  --z-color-container: #f3f3f3;
 }
 
 body[arco-theme='dark'] {
-  --zcolor-text-3: #ff3131;
+  --z-color-bg: #1a1a1a;
+  --z-color-container: #161616;
 }

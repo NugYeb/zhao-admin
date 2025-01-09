@@ -15,6 +15,21 @@ const router = createRouter({
           name: 'dashboard',
           component: () => import('../views/home/DashBoard.vue'),
         },
+        {
+          path: 'user',
+          name: 'user',
+          component: () => import('../views/home/UserAdmin.vue'),
+        },
+        {
+          path: 'article',
+          name: 'article',
+          component: () => import('../views/home/ArticleAdmin.vue'),
+        },
+        {
+          path: 'edit',
+          name: 'edit',
+          component: () => import('../views/home/MdEdit.vue'),
+        },
       ],
     },
     {

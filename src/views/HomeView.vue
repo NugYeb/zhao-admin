@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AsideMenu from '@/components/home/AsideMenu.vue'
-import HeaderComp from '@/components/home/HeaderComp.vue';
+import HeaderComp from '@/components/home/HeaderComp.vue'
 import { ref } from 'vue'
 const isCollapsed = ref(true)
 </script>
@@ -19,8 +19,6 @@ const isCollapsed = ref(true)
         <HeaderComp />
       </header>
       <main>
-        主体
-
         <RouterView />
       </main>
     </div>
@@ -33,7 +31,7 @@ const isCollapsed = ref(true)
   height: 100%;
   width: 100%;
   gap: 1rem;
-  padding: 1rem;
+  padding: 1rem 2rem 1rem 1rem;
   justify-content: center;
   align-items: center;
 }
@@ -48,17 +46,21 @@ aside {
 }
 
 .expanded-width {
-  width: 14.5rem;
+  width: 13rem;
 }
 
 header {
   height: 4rem;
-  border-radius: 0.6rem;
 }
 
 main {
   flex: 1;
   border-radius: 0.6rem;
+  background: var(--color-bg-2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 2px var(--color-border-3);
 }
 
 .container {

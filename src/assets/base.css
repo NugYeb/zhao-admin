@@ -9,7 +9,7 @@
 body {
   min-height: 100vh;
   color: var(--color-text-1);
-  background: var(--color-bg-3);
+  background: var(--z-color-bg);
   transition:
     color 0.5s,
     background-color 0.5s;

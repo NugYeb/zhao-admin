@@ -111,9 +111,9 @@ const toggleCollapsed = () => {
 }
 
 .menu-demo .arco-menu {
-  width: 200px;
+  width: 11rem;
   height: 100%;
-  box-shadow: 0 0 1px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 2px var(--color-border-3);
   border-radius: 0.6rem;
 }
 
