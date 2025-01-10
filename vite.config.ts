@@ -41,9 +41,9 @@ export default defineConfig({
           ) {
             return 'vendor'
           }
-          if (id.includes('node_modules/vue-i18n')) {
-            return 'vue-i18n'
-          }
+          // if (id.includes('node_modules/vue-i18n')) {
+          //   return 'vue-i18n'
+          // }
         },
         entryFileNames: 'assets/js/[name].[hash].js',
         chunkFileNames: 'assets/js/[name].[hash].js',

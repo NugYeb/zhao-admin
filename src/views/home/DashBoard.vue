@@ -7,10 +7,10 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 
-const router = useRouter()
+const route = useRouter()
 
 const goEdit = () => {
-  router.push('/edit')
+  route.push({ name: 'article_edit' })
 }
 </script>
 

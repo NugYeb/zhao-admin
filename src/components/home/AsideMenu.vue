@@ -120,8 +120,8 @@ initComp()
 }
 
 .menu-demo .arco-menu :deep(.arco-menu-collapse-button) {
-  width: 32px;
-  height: 32px;
+  width: 2rem;
+  height: 2rem;
   border-radius: 50%;
 }
 
@@ -129,20 +129,20 @@ initComp()
   .arco-menu:not(.arco-menu-collapsed)
   :deep(.arco-menu-collapse-button) {
   right: 0;
-  bottom: 8px;
+  bottom: 0.5rem;
   transform: translateX(50%);
 }
 
 .menu-demo .arco-menu.arco-menu-collapsed {
-  width: 48px;
+  width: 3rem;
   height: 100%;
-  padding-top: 24px;
-  padding-bottom: 138px;
-  border-radius: 22px;
+  padding-top: 1rem;
+  padding-bottom: 4rem;
+  border-radius: 1rem;
 }
 
 .menu-demo .arco-menu.arco-menu-collapsed :deep(.arco-menu-collapse-button) {
-  right: 8px;
-  bottom: 8px;
+  right: 0.5rem;
+  bottom: 0.5rem;
 }
 </style>

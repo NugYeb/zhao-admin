@@ -50,7 +50,7 @@ const router = createRouter({
               meta: {
                 title: '编辑',
               },
-              component: () => import('../views/home/MdEdit.vue'),
+              component: () => import('../views/home/ArticleEdit.vue'),
             },
           ],
         },

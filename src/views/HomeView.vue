@@ -34,7 +34,6 @@ const isCollapsed = ref(true)
   display: flex;
   height: 100%;
   width: 100%;
-  gap: 1rem;
   padding: 1rem 2rem 1rem 1rem;
   justify-content: center;
   align-items: center;
