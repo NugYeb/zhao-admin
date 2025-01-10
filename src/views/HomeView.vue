@@ -19,7 +19,11 @@ const isCollapsed = ref(true)
         <HeaderComp />
       </header>
       <main>
-        <RouterView />
+        <RouterView v-slot="{ Component }">
+          <transition name="fade" mode="out-in">
+            <component :is="Component" />
+          </transition>
+        </RouterView>
       </main>
     </div>
   </div>
@@ -56,11 +60,11 @@ header {
 main {
   flex: 1;
   border-radius: 0.6rem;
-  background: var(--color-bg-2);
+  /* background: var(--color-bg-2); */
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 0 2px var(--color-border-3);
+  /* box-shadow: 0 0 2px var(--color-border-3); */
 }
 
 .container {
@@ -69,5 +73,29 @@ main {
   flex-direction: column;
   gap: 1rem;
   height: calc(100vh - 3rem);
+}
+
+/*  组件刚开始离开 */
+/* .fade-leave-active {
+} */
+/* 组件离开结束 */
+.fade-leave-to {
+  transform: translateX(2rem);
+  opacity: 0;
+}
+/* 组件刚开始进入 */
+.fade-enter-active {
+  transform: translateX(-2rem);
+  opacity: 0;
+}
+/* 组件进入结束 */
+.fade-enter-to {
+  transform: translateX(0);
+  opacity: 1;
+}
+/* 正在进入和离开 */
+.fade-leave-active,
+.fade-enter-active {
+  transition: all 0.3s ease-out;
 }
 </style>
