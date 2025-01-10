@@ -27,12 +27,12 @@ const router = createRouter({
           children: [
             {
               path: 'list',
-              name: 'list',
-              component: () => import('../views/home/ArticleAdmin.vue'),
+              name: 'article_list',
+              component: () => import('../views/home/ArticleList.vue'),
             },
             {
               path: 'edit',
-              name: 'edit',
+              name: 'article_edit',
               component: () => import('../views/home/MdEdit.vue'),
             },
           ],

@@ -42,12 +42,12 @@ const menuData = ref<MenuType[]>([
     children: [
       {
         title: '文章列表',
-        name: 'list',
+        name: 'article_list',
         icon: markRaw(IconList),
       },
       {
         title: '文章编辑',
-        name: 'edit',
+        name: 'article_edit',
         icon: markRaw(IconEdit),
       },
     ],
