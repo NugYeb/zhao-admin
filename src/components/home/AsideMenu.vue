@@ -9,9 +9,9 @@ import {
   IconBook,
   IconList,
   IconEdit,
-  IconSettings,
 } from '@arco-design/web-vue/es/icon'
 import router from '@/router'
+import IconComp from '../common/IconComp.vue'
 
 const props = defineProps({
   collapsed: {
@@ -55,7 +55,7 @@ const menuData = ref<MenuType[]>([
   {
     title: '系统设置',
     name: 'system',
-    icon: markRaw(IconSettings),
+    icon: 'iconfont zew-shezhi1-copy',
   },
 ])
 
@@ -86,16 +86,16 @@ initComp()
     >
       <template v-for="item in menuData">
         <a-menu-item :key="item.name" v-if="!item.children">
-          <component :is="item.icon"></component>
+          <template #icon><IconComp :is="item.icon"></IconComp></template>
           <span>{{ item.title }}</span>
         </a-menu-item>
         <a-sub-menu v-if="item.children" :key="item.name">
-          <template #icon><component :is="item.icon"></component></template>
+          <template #icon><IconComp :is="item.icon"></IconComp></template>
           <template #title>
             <span>{{ item.title }}</span>
           </template>
           <a-menu-item :key="sub.name" v-for="sub in item.children">
-            <component :is="sub.icon"></component>
+            <template #icon><IconComp :is="sub.icon"></IconComp></template>
             <span>{{ sub.title }}</span>
           </a-menu-item>
         </a-sub-menu>

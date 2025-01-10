@@ -1,11 +1,12 @@
 @import './base.css';
 @import './var.css';
+@import './iconfont/iconfont.css';
 
 #app {
-    min-width: 100vw;
-    min-height: 100vh;
+  min-width: 100vw;
+  min-height: 100vh;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
