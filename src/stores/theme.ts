@@ -7,11 +7,13 @@ export const useThemeStore = defineStore('theme', () => {
 
   const theme = computed(() => currentTheme.value)
 
-  const editTheme= computed<Themes>(() => {
+  const isDark = computed(() => theme.value === 'dark')
+
+  const editTheme = computed<Themes>(() => {
     return theme.value === 'dark' ? 'dark' : 'light'
   })
 
-  function setTheme(newTheme: string) {
+  const setTheme = (newTheme: string) => {
     if (newTheme === 'dark') {
       document.body.setAttribute('arco-theme', 'dark')
     } else {
@@ -29,6 +31,7 @@ export const useThemeStore = defineStore('theme', () => {
 
   return {
     theme,
+    isDark,
     editTheme,
     initTheme,
     setTheme,

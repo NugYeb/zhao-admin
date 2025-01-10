@@ -1,20 +1,14 @@
 <script setup lang="ts">
-import { useThemeStore } from '@/stores/theme'
 import BreadCrumb from '../common/BreadCrumb.vue'
 import UserDrop from '../common/UserDrop.vue'
-
-const themeStore = useThemeStore()
-
-const toggleTheme = () => {
-  themeStore.setTheme(themeStore.theme === 'dark' ? 'light' : 'dark')
-}
+import ThemeComp from '../common/ThemeComp.vue'
 </script>
 
 <template>
   <div class="header">
     <BreadCrumb />
     <div class="header-right">
-      <a-button type="primary" @click="toggleTheme">主题</a-button>
+      <ThemeComp />
       <UserDrop />
     </div>
   </div>

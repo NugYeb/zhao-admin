@@ -61,3 +61,12 @@ body {
   scrollbar-color: rgba(0, 0, 0, 0.2) transparent; /* 设置滚动条滑块颜色为黑色透明度0.2，轨道颜色为透明 */
 }
 
+@media screen and (forced-colors: active) {
+  /* 高对比度模式下的样式， */
+  /* 为了解决浏览器控制台md编辑器页的样式弃用警告 */
+  /* 好像没有用 */
+  body {
+    background-color: black;
+    color: white;
+  }
+}
