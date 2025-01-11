@@ -1,7 +1,15 @@
-import type { BaseResponse } from '@/type/api/common'
 import instance from './axios'
-import type { LoginReq, LoginRes } from '@/type/api/login'
+import type { BaseResponse } from './common'
 
-export const login_in = (login_req: LoginReq): Promise<BaseResponse<LoginRes>> => {
+export interface LoginReq {
+  username: string
+  password: string
+}
+export interface LoginRes {
+  token: string
+}
+export const login_in = (
+  login_req: LoginReq,
+): Promise<BaseResponse<LoginRes>> => {
   return instance.post('/api/login', login_req)
 }

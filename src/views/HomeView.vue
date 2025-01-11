@@ -63,6 +63,7 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
   /* box-shadow: 0 0 2px var(--color-border-3); */
 }
 
