@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div id="template">SystemAdmin</div>
+  <div id="template">AboutPage</div>
 </template>
 
 <style scoped>

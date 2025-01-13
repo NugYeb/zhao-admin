@@ -1,14 +1,20 @@
 import instance from './axios'
-import type { BaseResponse } from './common'
+import type { ListParams, ListResponse } from './common'
 
 export interface UserInfo {
   id: number
-  username: string
   role: string
+  username: string
   nickname: string
   email: string
+  works: number
+  avatar: string
+  created_at: string
+  updated_at: string
 }
 
-export const getUserList = (): Promise<BaseResponse<UserInfo[]>> => {
-  return instance.get('/api/user')
+export const getUserList = (
+  params: ListParams,
+): Promise<ListResponse<UserInfo>> => {
+  return instance.get('/api/user', { params })
 }

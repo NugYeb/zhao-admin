@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div id="template">Home</div>
+  <div id="template">SystemInfo</div>
 </template>
 
 <style scoped>

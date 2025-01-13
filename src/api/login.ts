@@ -8,7 +8,7 @@ export interface LoginReq {
 export interface LoginRes {
   token: string
 }
-export const login_in = (
+export const loginIn = (
   login_req: LoginReq,
 ): Promise<BaseResponse<LoginRes>> => {
   return instance.post('/api/login', login_req)

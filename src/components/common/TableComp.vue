@@ -1,16 +1,26 @@
 <script setup lang="ts">
-import type { DataType } from '@/type/component/table'
-import type {
-  PaginationProps,
-  TableColumnData,
-  TableRowSelection,
-} from '@arco-design/web-vue'
+import type { ListParams, ListResponse } from '@/api/common'
+import type { PaginationProps, TableColumnData, TableData, TableRowSelection } from '@arco-design/web-vue'
 import { reactive, ref } from 'vue'
 
-const props = defineProps<{
+interface Props {
+  url: (params: ListParams) => Promise<ListResponse<unknown>>
   columns: TableColumnData[]
-  data: DataType[]
-}>()
+}
+const props = defineProps<Props>()
+
+const data = reactive({
+  list: [] as TableData[],
+  total: 0,
+})
+
+const getList = async () => {
+  const res = await props.url({})
+  console.log(res)
+  data.list = res.data.list as TableData[]
+  data.total = res.data.total
+}
+getList()
 
 const rowSelection = reactive<TableRowSelection>({
   type: 'checkbox',
@@ -18,7 +28,6 @@ const rowSelection = reactive<TableRowSelection>({
   onlyCurrent: false,
 })
 const selectedKeys = ref([])
-
 const pagination = <PaginationProps>{
   showTotal: true,
   showJumper: true,
@@ -49,13 +58,42 @@ const pagination = <PaginationProps>{
     <div class="table-body">
       <a-table
         row-key="id"
-        :sticky-header="true"
         :pagination="pagination"
         :columns="props.columns"
-        :data="props.data"
+        :data="data.list"
         :row-selection="rowSelection"
         v-model:selectedKeys="selectedKeys"
       >
+        <template #columns>
+          <template v-for="(item, index) in props.columns" :key="index">
+            <a-table-column v-if="item.render" :title="item.title as string">
+              <template #cell="data">
+                <component :is="item.render(data)"></component>
+              </template>
+            </a-table-column>
+            <a-table-column
+              v-else-if="!item.slotName"
+              :title="(item.title as string)"
+              :data-index="item.dataIndex"
+              :ellipsis="item.ellipsis"
+              :tooltip="item.tooltip"
+            ></a-table-column>
+            <a-table-column :title="item.title as string" v-else>
+              <template #cell="{ record }" v-if="item.slotName === 'action'">
+                <div class="cell-action">
+                  <a-button size="small" type="primary">编辑</a-button>
+                  <a-button size="small" type="primary" status="danger">删除</a-button>
+                </div>
+              </template>
+              <template #cell="{ record }" v-else-if="item.slotName === 'created_at' || item.slotName === 'updated_at'">
+                <span>自定义时间</span>
+              </template>
+              <template #cell="{ record }" v-else>
+                <slot :name="item.slotName" :record="record"></slot>
+              </template>
+            </a-table-column>
+          </template>
+        </template>
       </a-table>
     </div>
   </div>
@@ -73,8 +111,8 @@ const pagination = <PaginationProps>{
   width: 100%;
   max-height: 100%;
   display: flex;
-  flex-direction: column;
   gap: 1rem;
+  flex-direction: column;
   padding: 1rem;
   border-radius: 0.6rem;
   background: var(--color-bg-2);
@@ -90,7 +128,13 @@ const pagination = <PaginationProps>{
     width: 2rem;
   }
 }
-/* .table-body {
+.table-body {
+  flex: 1;
+  padding: 0 0 1rem 0;
   overflow-y: auto;
-} */
+}
+.cell-action{
+  display: flex;
+  gap: 0.6rem;
+}
 </style>

@@ -35,6 +35,7 @@ const theme = computed<Themes>(() => {
   width: 100%;
   min-height: 100%;
   border-radius: 0.6rem;
+  --md-bk-color: var(--color-bg-2) !important;
 }
 .md-editor-dark {
   --md-bk-color: var(--color-bg-2) !important;

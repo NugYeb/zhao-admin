@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { MenuType } from '@/type/component/menu'
+import type { MenuType } from './type'
 import { markRaw, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -34,6 +34,13 @@ const menuData = ref<MenuType[]>([
     title: '用户管理',
     name: 'user',
     icon: markRaw(IconUser),
+    children: [
+      {
+        title: '用户列表',
+        name: 'user_list',
+        icon: markRaw(IconList),
+      },
+    ],
   },
   {
     title: '文章管理',
@@ -56,6 +63,13 @@ const menuData = ref<MenuType[]>([
     title: '系统设置',
     name: 'system',
     icon: 'iconfont zew-shezhi1-copy',
+    children: [
+      {
+        title: '系统信息',
+        name: 'system_info',
+        icon: markRaw(IconEdit),
+      },
+    ],
   },
 ])
 

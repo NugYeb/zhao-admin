@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { login_in } from '@/api/login'
+import { loginIn } from '@/api/login'
 import { Message } from '@arco-design/web-vue'
 import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
@@ -12,7 +12,7 @@ const loginData = reactive({
 const router = useRouter()
 
 const submit = () => {
-  login_in(loginData).then((res) => {
+  loginIn(loginData).then((res) => {
     Message.success('登录成功')
     localStorage.setItem('token', res.data.token)
     goAdmin()
@@ -64,6 +64,7 @@ const goAdmin = () => {
   display: flex;
   justify-content: center;
   align-items: center;
+  background: var(--color-bg-1);
 }
 
 .login-card {

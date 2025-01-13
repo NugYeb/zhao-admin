@@ -7,7 +7,4 @@ export interface MenuType {
   children?: MenuType[]
 }
 
-export interface DropOptType {
-  title: string
-  name: string
-}
+

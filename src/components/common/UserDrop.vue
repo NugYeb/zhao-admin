@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { DropOptType } from '@/type/component/menu'
+import type { DropOptType } from './type'
 import router from '@/router'
 
 const handleSelect = (
