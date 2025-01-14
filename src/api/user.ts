@@ -13,6 +13,13 @@ export interface UserInfo {
   updated_at: string
 }
 
+export interface UserUpdateReq {
+  role: number
+  nickname: string
+  email: string
+  avatar: string
+}
+
 export const getUserList = (
   params: ListParams,
 ): Promise<ListResponse<UserInfo>> => {

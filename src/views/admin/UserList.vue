@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { TableColumnData } from '@arco-design/web-vue'
 import TableComp from '@/components/common/TableComp.vue'
-import { getUserList } from '@/api/user'
+import { getUserList, type UserInfo } from '@/api/user'
 
 const columns = <TableColumnData[]>[
   { title: 'ID', dataIndex: 'id' },
@@ -14,16 +14,28 @@ const columns = <TableColumnData[]>[
   { title: '更新时间', slotName: 'updated_at' },
   { title: '操作', slotName: 'action' },
 ]
+
+const add = () => {
+  console.log('add')
+}
+
+const edit = (record: UserInfo) => {
+  console.log(record)
+}
+
+const remove = <T,>(id_list: T[]) => {
+  console.log(id_list)
+}
 </script>
 
 <template>
   <div class="user-admin">
-    <TableComp :url="getUserList" :columns="columns">
+    <TableComp :url="getUserList" :columns="columns" addLable="添加用户" @add="add" @edit="edit" @remove="remove">
       <template #avatar="{ record }">
         <a-avatar :image-url="record.avatar"></a-avatar>
       </template>
       <template #role="{ record }">
-        {{ record.role === 1 ? '管理者' : '普通用户' }}
+        {{ record.role === 1 ? '管理者' : '用户' }}
       </template>
     </TableComp>
   </div>

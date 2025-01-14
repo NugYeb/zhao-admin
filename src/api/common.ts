@@ -1,3 +1,5 @@
+import instance from './axios'
+
 export interface BaseResponse<T> {
   code: number
   message: string
@@ -20,5 +22,6 @@ export interface ListParams {
   sort?: string
 }
 
-
-
+export const defaultDelete = <T>(url: string, id_list: T[]): Promise<BaseResponse<null>> => {
+  return instance.delete(url, { data: { id_list } })
+}
