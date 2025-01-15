@@ -11,14 +11,14 @@ export interface ListResponse<T> {
   message: string
   data: {
     list: T[]
-    total: number
+    count: number
   }
 }
 
-export interface ListParams {
+export interface ListParamsType {
   page?: number
-  page_size?: number
-  key?: string
+  limit?: number
+  keyword?: string
   sort?: string
 }
 

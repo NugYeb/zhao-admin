@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { TableColumnData } from '@arco-design/web-vue'
+import { Message, type SelectOptionData, type TableColumnData } from '@arco-design/web-vue'
 import TableComp from '@/components/common/TableComp.vue'
 import { getUserList, type UserInfo } from '@/api/user'
 
@@ -15,14 +15,22 @@ const columns = <TableColumnData[]>[
   { title: '操作', slotName: 'action' },
 ]
 
+const actionGroup = <SelectOptionData[]>[
+  {
+    label: '批量拉黑',
+    callback: async (id_list: (number | string)[]): Promise<boolean> => {
+      Message.success(`这只是个测试 ${id_list}`)
+      return true
+    },
+  },
+]
+
 const add = () => {
   console.log('add')
 }
-
 const edit = (record: UserInfo) => {
   console.log(record)
 }
-
 const remove = <T,>(id_list: T[]) => {
   console.log(id_list)
 }
@@ -30,7 +38,16 @@ const remove = <T,>(id_list: T[]) => {
 
 <template>
   <div class="user-admin">
-    <TableComp :url="getUserList" :columns="columns" addLable="添加用户" @add="add" @edit="edit" @remove="remove">
+    <TableComp
+      :url="getUserList"
+      :limit="10"
+      :columns="columns"
+      :action-group="actionGroup"
+      addLable="添加用户"
+      @add="add"
+      @edit="edit"
+      @remove="remove"
+    >
       <template #avatar="{ record }">
         <a-avatar :image-url="record.avatar"></a-avatar>
       </template>

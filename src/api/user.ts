@@ -1,5 +1,5 @@
 import instance from './axios'
-import type { ListParams, ListResponse } from './common'
+import type { ListParamsType, ListResponse } from './common'
 
 export interface UserInfo {
   id: number
@@ -21,7 +21,7 @@ export interface UserUpdateReq {
 }
 
 export const getUserList = (
-  params: ListParams,
+  params: ListParamsType,
 ): Promise<ListResponse<UserInfo>> => {
   return instance.get('/api/user', { params })
 }
