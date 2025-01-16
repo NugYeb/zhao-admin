@@ -1,3 +1,4 @@
+import type { SelectOptionData } from '@arco-design/web-vue'
 import instance from './axios'
 
 export interface BaseResponse<T> {
@@ -24,4 +25,9 @@ export interface ListParamsType {
 
 export const defaultDelete = <T>(url: string, id_list: T[]): Promise<BaseResponse<null>> => {
   return instance.delete(url, { data: { id_list } })
+}
+
+// select下拉框通用接口,获取选项数据
+export const defaultOption = (url: string): Promise<BaseResponse<SelectOptionData[]>> => {
+  return instance.get(url)
 }

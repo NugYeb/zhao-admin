@@ -2,6 +2,7 @@
 import { Message, type SelectOptionData, type TableColumnData } from '@arco-design/web-vue'
 import TableComp from '@/components/common/TableComp.vue'
 import { getUserList, type UserInfo } from '@/api/user'
+import type { FilterOptType } from '@/components/common/type'
 
 const columns = <TableColumnData[]>[
   { title: 'ID', dataIndex: 'id' },
@@ -25,6 +26,21 @@ const actionGroup = <SelectOptionData[]>[
   },
 ]
 
+const filterGroup = <FilterOptType[]>[
+  {
+    label: '角色过滤',
+    column: 'role',
+    options: [
+      {
+        label: '管理员',
+      },
+      {
+        label: '普通用户',
+      },
+    ],
+  },
+]
+
 const add = () => {
   console.log('add')
 }
@@ -39,11 +55,12 @@ const remove = <T,>(id_list: T[]) => {
 <template>
   <div class="user-admin">
     <TableComp
+      addLable="添加用户"
       :url="getUserList"
-      :limit="10"
+      :limit="2"
       :columns="columns"
       :action-group="actionGroup"
-      addLable="添加用户"
+      :filter-group="filterGroup"
       @add="add"
       @edit="edit"
       @remove="remove"

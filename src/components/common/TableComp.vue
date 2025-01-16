@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defaultDelete, type ListParamsType, type ListResponse } from '@/api/common'
+import { defaultDelete, defaultOption, type BaseResponse, type ListParamsType, type ListResponse } from '@/api/common'
 import { dateTimeFormat, relativeCurrentTime } from '@/utils/date'
 import {
   Message,
@@ -11,6 +11,7 @@ import {
 } from '@arco-design/web-vue'
 import type { SelectOptionValue } from '@arco-design/web-vue/es/select/interface'
 import { reactive, ref } from 'vue'
+import type { FilterOptType } from './type'
 
 interface Props {
   url: (params: ListParamsType) => Promise<ListResponse<unknown>>
@@ -22,6 +23,8 @@ interface Props {
   noActionGroup?: boolean // 默认启用操作组
   noCheckbox?: boolean // 默认启用复选框
   actionGroup?: SelectOptionData[]
+  filterGroup?: FilterOptType[] //后续可能会包含接口请求数据
+  noConfirm?: boolean // 二次确认，默认启用
 }
 const props = defineProps<Props>()
 const { limit = 10, rowKey = 'id', addLable = '添加', customDelete = false, noActionGroup = false } = props
@@ -42,9 +45,56 @@ const pagination = reactive(<PaginationProps>{
   defaultCurrent: 1,
 })
 
-const getList = async () => {
-  params.page = pagination.current
-  const res = await props.url(params)
+const getList = async (p?: ListParamsType) => {
+  // 原写法，会产生类似？role= 空字符串情况
+  // params.page = pagination.current
+  // if (p) {
+  //   Object.assign(params, p)
+  // }
+  // let res = await props.url(params)
+  // if (res.data.list.length === 0 && (pagination.current as number) > 1) {
+  //   pagination.current = 1
+  //   params.page = pagination.current
+  //   res = await props.url(params)
+  // }
+
+  // 改进写法，空字符串时不传
+  // let valid = false
+  // for (const key in p) {
+  //   if (p[key as keyof ListParamsType] !== '') {
+  //     valid = true
+  //     break
+  //   }
+  // }
+  // params.page = pagination.current
+  // let x = { ...params }
+  // if (valid) {
+  //   Object.assign(x, p)
+  // }
+  // let res = await props.url(x)
+  // if (res.data.list.length === 0 && (pagination.current as number) > 1) {
+  //   pagination.current = 1
+  //   params.page = pagination.current
+  //   x = { ...params }
+  //   res = await props.url(x)
+  // }
+
+  // 精简写法
+  // 合并参数，排除空字符串值（因为后台不支持query传空字符串,后面改了能支持，写都写了）
+  const mergedParams: ListParamsType = {
+    ...params,
+    ...Object.fromEntries(Object.entries(p || {}).filter(([, value]) => value !== '')),
+    page: pagination.current,
+  }
+
+  // 获取数据
+  let res = await props.url(mergedParams)
+  if (res.data.list.length === 0 && (pagination.current as number) > 1) {
+    pagination.current = 1
+    mergedParams.page = 1
+    res = await props.url(mergedParams)
+  }
+
   data.list = res.data.list as TableData[]
   data.count = res.data.count
   pagination.total = res.data.count
@@ -102,25 +152,39 @@ const actionMethod = () => {
 //==================================================================================
 //= 过滤
 //= filter
-const filterGroup = ref([
-  {
-    label: '角色过滤',
-    column: 'role',
-    value: 0,
-    options: [
-      {
-        label: '管理员',
-        value: 1,
-      },
-      {
-        label: '普通用户',
-        value: 2,
-      },
-    ],
-  },
-])
-const filterChange = (item: unknown, value: unknown) => {
-  console.log(item, value)
+const filter_group = ref<FilterOptType[]>([])
+const initFilterGroup = async () => {
+  if (!props.filterGroup) return
+  for (let i = 0; i < props.filterGroup.length; i++) {
+    const item = props.filterGroup[i]
+    let source = <SelectOptionData[]>[]
+    switch (typeof item.options) {
+      case 'function':
+        const res1 = await (item.options as (param?: unknown) => Promise<BaseResponse<SelectOptionData[]>>)()
+        source = res1.data
+        break
+      case 'object':
+        source = item.options as SelectOptionData[]
+        break
+      case 'string':
+        // 不完全能用，待完善
+        const res2 = await defaultOption(item.options as string)
+        source = res2.data
+        break
+    }
+
+    filter_group.value.push({
+      label: item.label,
+      value: i,
+      column: item.column,
+      options: source,
+    })
+  }
+}
+initFilterGroup()
+
+const filterChange = (item: SelectOptionData, value: unknown) => {
+  getList({ [item.column]: value })
 }
 
 //==================================================================================
@@ -177,9 +241,14 @@ const refresh = () => {
           :options="actionOptions"
           v-model="actionValue"
         ></a-select>
-        <a-button type="primary" status="danger" v-if="actionValue || actionValue === 0" @click="actionMethod"
-          >执行</a-button
-        >
+        <a-popconfirm content="确定执行吗?" v-if="!props.noConfirm" @ok="actionMethod">
+          <a-button type="primary" status="danger" v-if="actionValue || actionValue === 0">执行</a-button>
+        </a-popconfirm>
+        <template v-else>
+          <a-button type="primary" status="danger" v-if="actionValue || actionValue === 0" @click="actionMethod"
+            >执行</a-button
+          >
+        </template>
       </div>
       <div class="action-search">
         <a-input-search
@@ -190,10 +259,10 @@ const refresh = () => {
         ></a-input-search>
       </div>
       <slot name="action-other-search"></slot>
-      <div class="action-filter" v-if="filterGroup.length">
+      <div class="action-filter" v-if="filter_group.length">
         <a-select
           allow-clear
-          v-for="(item, index) in filterGroup"
+          v-for="(item, index) in filter_group"
           :options="item.options"
           :placeholder="item.label"
           :key="index"
@@ -233,7 +302,7 @@ const refresh = () => {
               <template #cell="{ record }" v-if="item.slotName === 'action'">
                 <div class="cell-action">
                   <a-button size="small" type="primary" @click="edit(record)">编辑</a-button>
-                  <a-popconfirm content="Are you sure you want to delete?" @ok="remove(record)">
+                  <a-popconfirm content="确定删除吗?" @ok="remove(record)">
                     <a-button size="small" type="primary" status="danger">删除</a-button>
                   </a-popconfirm>
                 </div>
@@ -273,6 +342,10 @@ const refresh = () => {
   background: var(--color-bg-2);
 }
 .action-group {
+  display: flex;
+  gap: 1rem;
+}
+.action-filter {
   display: flex;
   gap: 1rem;
 }
