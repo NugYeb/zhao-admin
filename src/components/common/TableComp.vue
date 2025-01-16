@@ -25,6 +25,9 @@ interface Props {
   actionGroup?: SelectOptionData[]
   filterGroup?: FilterOptType[] //后续可能会包含接口请求数据
   noConfirm?: boolean // 二次确认，默认启用
+  noAdd?: boolean // 默认启用添加
+  noEdit?: boolean // 默认启用编辑
+  noDelete?: boolean // 默认启用删除
 }
 const props = defineProps<Props>()
 const { limit = 10, rowKey = 'id', addLable = '添加', customDelete = false, noActionGroup = false } = props
@@ -45,7 +48,10 @@ const pagination = reactive(<PaginationProps>{
   defaultCurrent: 1,
 })
 
+const loading = ref(false)
+
 const getList = async (p?: ListParamsType) => {
+  loading.value = true
   // 原写法，会产生类似？role= 空字符串情况
   // params.page = pagination.current
   // if (p) {
@@ -98,6 +104,7 @@ const getList = async (p?: ListParamsType) => {
   data.list = res.data.list as TableData[]
   data.count = res.data.count
   pagination.total = res.data.count
+  loading.value = false
 }
 getList()
 const pageChange = (page: number) => {
@@ -230,7 +237,7 @@ const refresh = () => {
 <template>
   <div class="custom-table">
     <div class="table-header">
-      <div class="action-create">
+      <div class="action-create" v-if="!props.noAdd">
         <a-button type="primary" @click="add">{{ addLable }}</a-button>
       </div>
       <div class="action-group" v-if="!noActionGroup">
@@ -274,7 +281,7 @@ const refresh = () => {
         <a-button @click="refresh"> <IconRefresh /></a-button>
       </div>
     </div>
-    <div class="table-body">
+    <a-spin class="table-body" :loading="loading" tip="加载中...">
       <a-table
         :row-key="rowKey"
         :pagination="pagination"
@@ -301,10 +308,13 @@ const refresh = () => {
             <a-table-column :title="item.title as string" v-else>
               <template #cell="{ record }" v-if="item.slotName === 'action'">
                 <div class="cell-action">
-                  <a-button size="small" type="primary" @click="edit(record)">编辑</a-button>
-                  <a-popconfirm content="确定删除吗?" @ok="remove(record)">
+                  <slot name="action-left" :record="record"></slot>
+                  <a-button size="small" type="primary" @click="edit(record)" v-if="!props.noEdit">编辑</a-button>
+                  <slot name="action-middle" :record="record"></slot>
+                  <a-popconfirm content="确定删除吗?" @ok="remove(record)" v-if="!props.noDelete">
                     <a-button size="small" type="primary" status="danger">删除</a-button>
                   </a-popconfirm>
+                  <slot name="action-right" :record="record"></slot>
                 </div>
               </template>
               <template #cell="{ record }" v-else-if="item.slotName === 'created_at' || item.slotName === 'updated_at'">
@@ -318,7 +328,7 @@ const refresh = () => {
           </template>
         </template>
       </a-table>
-    </div>
+    </a-spin>
   </div>
 </template>
 
@@ -361,6 +371,7 @@ const refresh = () => {
   flex: 1;
   padding: 0 0 0.1rem 0;
   overflow-y: auto;
+  width: 100%;
 }
 .cell-action {
   display: flex;

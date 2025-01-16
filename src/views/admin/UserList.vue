@@ -3,6 +3,7 @@ import { Message, type SelectOptionData, type TableColumnData } from '@arco-desi
 import TableComp from '@/components/common/TableComp.vue'
 import { getUserList, type UserInfo } from '@/api/user'
 import type { FilterOptType } from '@/components/common/type'
+import { ref } from 'vue'
 
 const columns = <TableColumnData[]>[
   { title: 'ID', dataIndex: 'id' },
@@ -41,8 +42,11 @@ const filterGroup = <FilterOptType[]>[
   },
 ]
 
+const visible = ref(false)
+
 const add = () => {
   console.log('add')
+  visible.value = true
 }
 const edit = (record: UserInfo) => {
   console.log(record)
@@ -53,11 +57,12 @@ const remove = <T,>(id_list: T[]) => {
 </script>
 
 <template>
+  <a-modal title="创建用户" v-model:visible="visible"></a-modal>
   <div class="user-admin">
     <TableComp
       addLable="添加用户"
       :url="getUserList"
-      :limit="2"
+      :limit="6"
       :columns="columns"
       :action-group="actionGroup"
       :filter-group="filterGroup"
